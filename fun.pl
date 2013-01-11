@@ -37,6 +37,9 @@ expand_arglist([H0|T0], [H|T], Guards) :-
     ),
     expand_arglist(T0, T, OtherGuards).
 
+% build a list out of a nested operator term. for example,
+% (a,b,c) parses to ','(a,','(b,c)).  This converts between
+% that form and simple list form: [a,b,c]
 xfy_list(Op, Term, [Left|List]) :-
     Term =.. [Op, Left, Right],
     xfy_list(Op, Right, List),
