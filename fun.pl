@@ -28,14 +28,22 @@ function_expansion_loop(T0, T) :-  % look for expandable terms inside T0
     T =.. [Functor|Args].
 
 expand_arglist([], [], []).
-expand_arglist([H0|T0], [H|T], Guards) :-
-    (   ground(H0),
-        user:function_expansion(H0, H, Guard)
-    ->  Guards = [Guard|OtherGuards]
-    ;   H = H0,
-        Guards = OtherGuards
-    ),
-    expand_arglist(T0, T, OtherGuards).
+expand_arglist([H0|T0], [H|T], [Guard|Guards]) :-  % leaf
+    ground(H0),
+    user:function_expansion(H0, H, Guard),
+    expand_arglist(T0, T, Guards),
+    !.
+expand_arglist([H0|T0], [H|T], Guards) :-          % subtree
+    ground(H0),
+    H0 =.. [Functor|Args0],
+    expand_arglist(Args0, Args, NestedGuards),
+    H =.. [Functor|Args],
+    expand_arglist(T0, T, TailGuards),
+    append(NestedGuards, TailGuards, Guards),
+    !.
+expand_arglist([H0|T0], [H0|T], Guards) :-
+    var(H0),
+    expand_arglist(T0, T, Guards).
 
 % build a list out of a nested operator term. for example,
 % (a,b,c) parses to ','(a,','(b,c)).  This converts between
@@ -47,10 +55,10 @@ xfy_list(Op, Term, [Left|List]) :-
 xfy_list(_, Term, [Term]).
 
 user:goal_expansion(T0, T) :-
-%exp(T0,T) :-
+    format('raw: ~p~n', [T0]),
     (_,_) \= T0,  % ignore conjunction of smaller goals
     (_;_) \= T0,  % ignore disjunction of smaller goals
-    format('attempt: ~p~n', [T0]),
+    format('  inside~n'),
     T0 =.. [Functor|Args],
     fun:expand_arglist(Args, NewArgs, Preconditions),
     format('  guards: ~p~n', [Preconditions]),
@@ -61,4 +69,5 @@ user:goal_expansion(T0, T) :-
     format('  done: ~p~n', [T]).
 
 hmm :-
-    say(hi, pi, bye, more(pi)).
+    say(hi, pi, bye, more(pi)),
+    true.
