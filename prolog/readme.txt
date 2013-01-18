@@ -31,6 +31,8 @@ function_expansion/3 lets you write macros so that =pi= can be included
 directly in format's arguments.  Auxiliary variables are generated for
 you at compile time.
 
+Repository available on GitHub: https://github.com/mndrix/function_expansion
+
 ---+ Installation
 
 Using SWI-Prolog 6.3 or later:
@@ -39,3 +41,6 @@ Using SWI-Prolog 6.3 or later:
     $ swipl
     1 ?- pack_install(function_expansion).
 ==
+
+@author Michael Hendricks <michael@ndrix.org>
+@license BSD
