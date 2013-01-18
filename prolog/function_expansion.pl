@@ -1,13 +1,4 @@
-:- module(fun,
-          [ op(950, xfy, $)
-          , op(975, xfy, of)
-          ]).
-
-/*
-%%	Function:callable $ X is det.
-:- op(950, xfy, $).
-$(_,_).
-*/
+:- module(function_expansion, []).
 
 %%	user:function_expansion(Term, Replacement, Guard).
 %
@@ -89,7 +80,7 @@ control(\+(_)).
 user:goal_expansion(T0, T) :-
     \+ control(T0),  % goal_expansion/2 already descends into these
     T0 =.. [Functor|Args],
-    fun:expand_arglist(Args, NewArgs, Preconditions),
+    function_expansion:expand_arglist(Args, NewArgs, Preconditions),
     T1 =.. [Functor|NewArgs],
 
     % remove guards that are always tue

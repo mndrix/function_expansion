@@ -1,4 +1,4 @@
-:- use_module(fun).
+:- use_module(function_expansion).
 
 user:function_expansion(pi, 3.14159, circles_are_round).
 user:function_expansion(hi, X, X = hello).
