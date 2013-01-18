@@ -1,9 +1,9 @@
 :- module(function_expansion, []).
 
-%%	user:function_expansion(Term, Replacement, Guard).
+%%	user:function_expansion(+Term, -Replacement, -Guard) is semidet.
 %
 %	Like term_expansion/2, function_expansion/3 provides for macro
-%	expansion of Prolog source code.  In this case, by expanding a
+%	expansion of Prolog source code.  In this case, by expanding
 %	Term which is nested inside a parent term.  Term is replaced with
 %	Replacement.  Guard is placed as a conjunction before the parent
 %	term.  Guard typically binds Replacement in some useful fashion.

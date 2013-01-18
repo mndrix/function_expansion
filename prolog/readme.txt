@@ -1,0 +1,41 @@
+---+ Name
+
+=function_expansion= - Help for writing function-like macros
+
+---+ Synopsis
+
+==
+:- use_module(library(function_expansion)).
+user:function_expansion(incr(N), X, X is N+1).
+main :-
+    format('After 2 comes ~p~n', [incr(2)]).
+==
+
+---+ Description
+
+Prolog doesn't offer function syntax.  Anything one can do with
+functions, she can do with predicates. The syntax is a little
+verbose because it requires an auxliary variable.
+
+For example, one might approximate pi:
+
+==
+pi(3.14159).
+main :-
+    pi(Pi),
+    format('pi is roughly ~p~n', [Pi]).
+==
+
+It's often obnoxious to think up a name for an auxiliary variable.
+function_expansion/3 lets you write macros so that =pi= can be included
+directly in format's arguments.  Auxiliary variables are generated for
+you at compile time.
+
+---+ Installation
+
+Using SWI-Prolog 6.3 or later:
+
+==
+    $ swipl
+    1 ?- pack_install(function_expansion).
+==
