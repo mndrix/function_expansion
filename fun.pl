@@ -15,7 +15,7 @@ $(_,_).
 %	expansion of Prolog source code.  In this case, by expanding a
 %	Term which is nested inside a parent term.  Term is replaced with
 %	Replacement.  Guard is placed as a conjunction before the parent
-%	term.
+%	term.  Guard typically binds Replacement in some useful fashion.
 %
 %   For example, a function macro which doubles its argument might
 %   expand this
@@ -34,6 +34,12 @@ $(_,_).
 %	    V = 9,
 %	    A is 2*V,
 %	    format('~p times 2 is ~p~n', [V, A]).
+%	==
+%
+%	Mathematical constants might be implemented like
+%
+%	==
+%	user:function_expansion(pi, 3.14159, true).
 %	==
 :- dynamic user:function_expansion/3.
 :- multifile user:function_expansion/3.
@@ -85,5 +91,10 @@ user:goal_expansion(T0, T) :-
     T0 =.. [Functor|Args],
     fun:expand_arglist(Args, NewArgs, Preconditions),
     T1 =.. [Functor|NewArgs],
-    xfy_list(',', Guard, Preconditions),
-    T = (Guard, T1).
+
+    % remove guards that are always tue
+    exclude(==(true), Preconditions, NoTrues),
+    (   xfy_list(',', Guard, NoTrues)
+    ->  T = (Guard, T1)
+    ;   T = T1   % empty guard clause
+    ).
