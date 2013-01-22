@@ -83,7 +83,7 @@ user:goal_expansion(T0, T) :-
     function_expansion:expand_arglist(Args, NewArgs, Preconditions),
     T1 =.. [Functor|NewArgs],
 
-    % remove guards that are always tue
+    % remove guards that are always true
     exclude(==(true), Preconditions, NoTrues),
     (   xfy_list(',', Guard, NoTrues)
     ->  T = (Guard, T1)
