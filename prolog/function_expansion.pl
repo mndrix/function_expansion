@@ -1,4 +1,5 @@
 :- module(function_expansion, []).
+:- use_module(library(lists), [append/3]).
 :- use_module(library(apply), [exclude/3]).
 
 %%	user:function_expansion(+Term, -Replacement, -Guard) is semidet.
